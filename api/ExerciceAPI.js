@@ -1,14 +1,30 @@
 const Exercice = require("../datamodel/exercice");
 module.exports = (app, ExerciceService) => {
+
     app.get("/exercice", async (req, res) => {
+        const token = req.header('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ error: 'Token non fourni' });
+        }
+
         try {
-            res.json(await ExerciceService.dao.getAll())
+            jwt.verify(token, 'votre_clé_secrète', async (err, decoded) => {
+                if (err) {
+                    if (err.name === 'TokenExpiredError') {
+                        res.status(403).json({error: 'Token expiré'});
+                    } else {
+                        res.status(403).json({error: 'Token non valide'});
+                    }
+                } else {
+                    res.json(await ExerciceService.dao.getAll());
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(403).json({ error: 'Token non valide' });
         }
-        catch (error) {
-            console.error(error)
-            res.status(500).json({ error: 'Erreur lors de la récupération des données'})
-        }
-    })
+    });
 
     app.post("/exercice", (req, res) => {
         const exercice = req.body

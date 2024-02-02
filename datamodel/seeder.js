@@ -46,7 +46,7 @@ module.exports = (ExerciceService, UserService) => {
                                                           )
                                             )
             await ExerciceService.dao.insert(new Exercice(  "Développer militaire",
-                                                            "Epaule, barre ou altère",
+                                                            "Epaule, Barre ou altère",
                                                             "Top",
                                                             "Isolation"
                                                           )
