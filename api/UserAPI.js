@@ -3,9 +3,22 @@ const bodyParser = require('body-parser');
 
 module.exports = (app, Userservice, jwt) => {
 
+    app.get("/verifyToken", jwt.validateJWT, async (req, res) => {
+        console.log("verif with param")
+        return res.end();
+    })
+    /*app.get("/verifyToken", async (req, res) => {
+        console.log("verif sans log")
+        res.status(200);
+    })*/
+
+    app.get("/verifyUserExistence", async (req, res) => {
+        res.status(200);
+    })
+
     app.get("/user", async (req, res) => {
         try {
-            res.json(await Userservice.dao.getAll())
+            res.json(await Userservice.dao.getAllUser())
         }
         catch (error) {
             console.error(error)
@@ -17,7 +30,7 @@ module.exports = (app, Userservice, jwt) => {
         app.use(bodyParser.json());
         const user = req.body
         console.log(req)
-        if (!Userservice.dao.isValid(user))  {
+        if (!Userservice.dao.isValidUser(user))  {
             return res.status(400).end()
         }
         Userservice.insert(new User(user.login, user.password))
@@ -44,7 +57,7 @@ module.exports = (app, Userservice, jwt) => {
 
     app.put("/user", async (req, res) => {
         const user = req.body
-        if ((user.id === undefined) || (user.id == null) || (!Userservice.dao.isValid(user))) {
+        if ((user.id === undefined) || (user.id == null) || (!Userservice.dao.isValidUser(user))) {
             return res.status(400).end()
         }
         if (await Userservice.dao.getById(user.id) === undefined) {
@@ -70,11 +83,13 @@ module.exports = (app, Userservice, jwt) => {
                     res.status(401).end()
                     return
                 }
-                res.json({'token': jwt.generateJWT(login)})
+                res.json({'token': jwt.generateJWT(authenticated.id)})
             })
             .catch(e => {
                 console.log(e)
                 res.status(500).end()
             })
     })
+
+    //TODO faire le vérification du user lorque le token est bon
 }

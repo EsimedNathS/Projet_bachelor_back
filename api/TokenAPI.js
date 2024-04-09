@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 
 module.exports = (app, Userservice, jwt) => {
 
-    app.get("/verifyToken", async (req, res) => {
+    /*app.get("/verifyToken", async (req, res) => {
+        console.log("token api")
         if (!token) {
             return res.status(401).json({ error: 'Token non fourni' });
         }
@@ -21,7 +22,7 @@ module.exports = (app, Userservice, jwt) => {
             console.error(error);
             res.status(403).json({ error: 'Token non valide' });
         }
-    })
+    })*/
 
 
 }

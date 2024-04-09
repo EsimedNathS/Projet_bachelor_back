@@ -5,14 +5,14 @@ module.exports = class UserDAO extends BaseDAO {
         super(db, "Users")
     }
 
-    getAll() {
+    getAllUser() {
         return new Promise((resolve, reject) =>
             this.db.query('SELECT * FROM Users ORDER BY id')
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
 
-    isValid(user) {
+    isValidUser(user) {
         user.login = user.login.trim()
         if (user.login === "") return false
         user.password = user.password.trim()

@@ -1,10 +1,14 @@
 const User = require("./user.js");
 const Exercice = require("./exercice.js");
+const Programme = require("./programme.js");
 
-module.exports = (ExerciceService, UserService) => {
+module.exports = (ExerciceService, UserService, ProgrammeService) => {
     return new Promise(async (resolve, reject) => {
         try {
             await ExerciceService.dao.db.query("CREATE TABLE Exercice(id SERIAL PRIMARY KEY, name TEXT, description TEXT, groupe TEXT, type TEXT)")
+            await ExerciceService.dao.db.query("CREATE TABLE Favori_exo(id SERIAL PRIMARY KEY, IDExo INT, IDUser INT)")
+            await ProgrammeService.dao.db.query("CREATE TABLE Programme(id SERIAL PRIMARY KEY, name TEXT, day TEXT, favori BOOL, IDUser INT)")
+            await ProgrammeService.dao.db.query("CREATE TABLE ProgExo(id SERIAL PRIMARY KEY, IDExo INT, IDProg INT)")
             await UserService.dao.db.query("CREATE TABLE Users(id SERIAL PRIMARY KEY, login TEXT, challenge TEXT)")
 
             // INSERT Users
@@ -13,6 +17,7 @@ module.exports = (ExerciceService, UserService) => {
                 const randomPassWord = "MDP"
                 await UserService.insert(new User(randomLogin, randomPassWord) )
             }
+
 
             // INSERT Exercice
             await ExerciceService.dao.insert(new Exercice(  "Curl Biceps",
@@ -45,12 +50,31 @@ module.exports = (ExerciceService, UserService) => {
                                                             "Polymusculaire"
                                                           )
                                             )
-            await ExerciceService.dao.insert(new Exercice(  "Développer militaire",
-                                                            "Epaule, Barre ou altère",
-                                                            "Top",
-                                                            "Isolation"
-                                                          )
-                                            )
+            var exo_test = new Exercice(  "Développer militaire",
+                                                   "Epaule, Barre ou altère",
+                                                   "Top",
+                                                   "Isolation"
+                                                )
+            var res = await ExerciceService.dao.insert(exo_test);
+            var exercice_id = res.rows[0].id;
+
+
+
+            // INSERT Programme
+            var prog_test = new Programme( "Test de nom",
+                                                    "Lundi",
+                                                    "false",
+                                                    "4"
+                                                  )
+            await ProgrammeService.dao.insert(prog_test)
+
+            var res = await ProgrammeService.dao.insert(prog_test);
+            var programme_id = res.rows[0].id;
+
+            // INSERT ProgExo
+            await ProgrammeService.dao.insertExo(programme_id, exercice_id)
+
+
         } catch (e) {
             if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
                 resolve()

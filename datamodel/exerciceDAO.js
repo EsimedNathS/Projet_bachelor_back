@@ -12,7 +12,24 @@ module.exports = class ExerciceDAO extends BaseDAO {
                 .catch(e => reject(e)))
     }
 
-    isValid(exercice) {
+    getAllFavori(IDUser) {
+        return new Promise((resolve, reject) =>
+            this.db.query(`SELECT * FROM Favori_exo WHERE IDUser = '${IDUser}' ORDER BY id`)
+                .then(res => resolve(res.rows))
+                .catch(e => reject(e)))
+    }
+
+    getAllByProgramme(id_programme) {
+        return new Promise((resolve, reject) =>
+            this.db.query('SELECT Exercice.* FROM Exercice, ProgExo ' +
+                ' WHERE Exercice.id = IDExo' +
+                ' AND IDProg = $1' +
+                ' ORDER BY id', [id_programme])
+                .then(res => resolve(res.rows))
+                .catch(e => reject(e)))
+    }
+
+    isValidExo(exercice) {
         exercice.name = exercice.name.trim()
         if (exercice.name === "") return false
         exercice.description = exercice.description.trim()
@@ -25,12 +42,16 @@ module.exports = class ExerciceDAO extends BaseDAO {
     }
 
     update(exercice) {
-        return this.db.query("UPDATE List SET shop=$2,date=$3,archived=$4 WHERE id=$1",
+        return this.db.query("UPDATE List SET name=$2,description=$3,groupe=$4,type=$5 WHERE id=$1",
             [exercice.id, exercice.name, exercice.description, exercice.groupe, exercice.type])
     }
 
-    insert(exercice){
-        return this.db.query(`INSERT INTO Exercice (name,description,groupe,type) VALUES  ('${exercice.name}','${exercice.description}','${exercice.groupe}','${exercice.type}')`)
+    insertExo(exercice){
+        return this.db.query(`INSERT INTO Exercice (name,description,groupe,type) VALUES  ('${exercice.name}','${exercice.description}','${exercice.groupe}','${exercice.type}') RETURNING id`)
+    }
+
+    insertExoFavori(exercice_id, user_id){
+        return this.db.query(`INSERT INTO Favori_exo (IDUser, IDExo) VALUES  ('${user_id}','${exercice_id}') RETURNING id`)
     }
 
 }
