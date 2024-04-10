@@ -54,4 +54,9 @@ module.exports = class ExerciceDAO extends BaseDAO {
         return this.db.query(`INSERT INTO Favori_exo (IDUser, IDExo) VALUES  ('${user_id}','${exercice_id}') RETURNING id`)
     }
 
+    deleteExoFavori(exercice_id, user_id){
+        return this.db.query("DELETE FROM Favori_exo WHERE IDExo=$1 AND IDUser=$2",
+            [exercice_id, user_id])
+    }
+
 }

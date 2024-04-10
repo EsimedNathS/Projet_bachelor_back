@@ -85,20 +85,18 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
     })
 
     app.patch("/programme", jwt.validateJWT, async (req, res) => {
-        const value_patch = req.body
-        if ('name' in value_patch) {
-            ProgrammeService.dao.patch('name', value_patch['name'], value_patch['id_programme'])
-                .then(_ => res.status(200).end())
-                .catch(e => {
-                    console.log(e)
-                    res.status(500).end()
-                })
-        }
-        if ('day' in value_patch) {
-            ProgrammeService.dao.verifyDay(value_patch['day'], req.user.id)
+        const data_patch = req.body
+        ProgrammeService.dao.patch(data_patch['champ_patch'], data_patch['value_patch'], data_patch['id_programme'])
+            .then(_ => res.status(200).end())
+            .catch(e => {
+                console.log(e)
+                res.status(500).end()
+            })
+        if ('day' in data_patch) {
+            ProgrammeService.dao.verifyDay(data_patch['day'], req.user.id)
                 .then( verifyResult => {
                     if (verifyResult.rows.length === 0){
-                        ProgrammeService.dao.patch('day', value_patch['day'], value_patch['id_programme'])
+                        ProgrammeService.dao.patch('day', data_patch['day'], data_patch['id_programme'])
                             .then(_ => res.status(200).end())
                             .catch(e => {
                                 console.log(e)

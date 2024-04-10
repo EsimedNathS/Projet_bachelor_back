@@ -10,8 +10,8 @@ module.exports = class UserService {
     hashPassword(password) {
         return bcrypt.hashSync(password, 10)  // 10 : cost factor -> + élevé = hash + sûr
     }
-    insert(user) {
-        return this.dao.insert(new User(user.login, this.hashPassword(user.challenge)))
+    insertUser(user) {
+        return this.dao.insertUser(new User(user.login, this.hashPassword(user.challenge)))
     }
     comparePassword(password, hash) {
         return bcrypt.compareSync(password, hash)

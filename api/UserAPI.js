@@ -33,7 +33,7 @@ module.exports = (app, Userservice, jwt) => {
         if (!Userservice.dao.isValidUser(user))  {
             return res.status(400).end()
         }
-        Userservice.insert(new User(user.login, user.password))
+        Userservice.insertUser(new User(user.login, user.password))
             .then(_ => res.status(200).end())
             .catch(e => {
                 console.log(e)

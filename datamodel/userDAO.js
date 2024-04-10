@@ -32,7 +32,7 @@ module.exports = class UserDAO extends BaseDAO {
                 .catch(e => reject(e)))
     }
 
-    insert(user){
+    insertUser(user){
         return this.db.query(`INSERT INTO Users (login,challenge) VALUES  ('${user.login}','${user.challenge}')`)
     }
 

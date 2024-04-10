@@ -2,22 +2,32 @@ const Exercice = require("../datamodel/exercice");
 module.exports = (app, ExerciceService, jwt) => {
 
     app.get("/exercice", jwt.validateJWT, async (req, res) => {
-        const token = req.header('Authorization');
-
-        if (!token) {
-            return res.status(401).json({ error: 'Token non fourni' });
-        }
         res.json(await ExerciceService.dao.getAll());
     });
 
     app.get("/exercice/favori", jwt.validateJWT, async (req, res) => {
-        const token = req.header('Authorization');
+        try {
+            const id_favoris = await ExerciceService.dao.getAllFavori(req.user.id);
 
-        if (!token) {
-            return res.status(401).json({ error: 'Token non fourni' });
+            const promises = [];
+            id_favoris.forEach(id => {
+                promises.push(ExerciceService.dao.getById(id['idexo']));
+            });
+
+            Promise.all(promises)
+                .then(results => {
+                    res.json(results);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    res.status(500).send("Internal Server Error");
+                });
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).send("Internal Server Error");
         }
-        res.json(await ExerciceService.dao.getAllFavori());
     });
+
 
     app.post("/exercice", (req, res) => {
         const exercice = req.body
@@ -36,6 +46,16 @@ module.exports = (app, ExerciceService, jwt) => {
     app.post("/exercice/favori", jwt.validateJWT, (req, res) => {
         const exercice_id = req.body['exercice_id']
         ExerciceService.dao.insertExoFavori(exercice_id, req.user.id)
+            .then(_ => res.status(200).end())
+            .catch(e => {
+                console.log(e)
+                res.status(500).end()
+            })
+    })
+
+    app.delete("/exercice/favori", jwt.validateJWT, (req, res) => {
+        const exercice_id = req.body['exercice_id']
+        ExerciceService.dao.deleteExoFavori(exercice_id, req.user.id)
             .then(_ => res.status(200).end())
             .catch(e => {
                 console.log(e)
