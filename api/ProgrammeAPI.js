@@ -28,7 +28,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
         if (!ProgrammeService.dao.isValidProg(programme))  {
             return res.status(400).end()
         }
-        ProgrammeService.dao.insertProg(new Programme(programme.name,programme.day,programme.favori,programme.IDUser))
+        ProgrammeService.dao.insertProg(new Programme(programme.name,programme.day,programme.favori,req.user.id))
             .then(insertionResult => {
                 res.status(200).json({id: insertionResult.rows[0].id});
             })
