@@ -25,4 +25,23 @@ module.exports = class UserService {
             return false;
         }
     }
+
+    isValidUser(user) {
+        user.login = user.login.trim()
+        if (user.login === "") return false
+        user.password = user.password.trim()
+        if (user.password === "") return false
+        return true
+    }
+
+    isValidLogin(login) {
+        this.dao.getByLogin(login.trim())
+            .then(user => {
+                if (user != null) {
+                    return false
+                } else {
+                    return true
+                }
+            })
+    }
 }

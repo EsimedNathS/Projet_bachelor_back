@@ -5,26 +5,6 @@ module.exports = class UserDAO extends BaseDAO {
         super(db, "Users")
     }
 
-    getAllUser() {
-        return new Promise((resolve, reject) =>
-            this.db.query('SELECT * FROM Users ORDER BY id')
-                .then(res => resolve(res.rows))
-                .catch(e => reject(e)))
-    }
-
-    isValidUser(user) {
-        user.login = user.login.trim()
-        if (user.login === "") return false
-        user.password = user.password.trim()
-        if (user.password === "") return false
-        return true
-    }
-
-    update(user) {
-        return this.db.query("UPDATE Users SET login=$2,passWord=$3 WHERE id=$1",
-            [user.id, user.login, user.challenge])
-    }
-
     getByLogin(login) {
         return new Promise((resolve, reject) =>
             this.db.query("SELECT * FROM Users WHERE login=$1", [login])
@@ -33,7 +13,7 @@ module.exports = class UserDAO extends BaseDAO {
     }
 
     insertUser(user){
-        return this.db.query(`INSERT INTO Users (login,challenge) VALUES  ('${user.login}','${user.challenge}')`)
+        return this.db.query("INSERT INTO Users (login,challenge) VALUES  ($1,$2)", [user.login, user.challenge])
     }
 
 }

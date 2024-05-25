@@ -3,9 +3,6 @@ module.exports = class BaseDAO {
         this.db = db
         this.tablename = tablename
     }
-    insert(nameCol, data){
-        return this.db.query(`INSERT INTO ${this.tablename}(${nameCol}) VALUES  (${data})`)
-    }
     delete(id) {
         return this.db.query(`DELETE FROM ${this.tablename} WHERE id=$1`, [id])
     }
