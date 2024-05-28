@@ -12,8 +12,35 @@ module.exports = class ProgrammeDAO extends BaseDAO {
                 .catch(e => reject(e)))
     }
 
-    patch(champ, value, id){
-        return this.db.query("UPDATE Programme SET ${champ}=$1 WHERE id=$2", [value, id])
+
+    patch(champ, value, id) {
+        let query = "";
+        const values = [value, id];
+
+        switch(champ) {
+            case "name":
+                query = "UPDATE Programme SET name = $1 WHERE id = $2";
+                break;
+            case "favori":
+                query = "UPDATE Programme SET favori = $1 WHERE id = $2";
+                break;
+            case "day":
+                query = "UPDATE Programme SET day = $1 WHERE id = $2";
+                break;
+            default:
+                throw new Error("Champ non autorisé");
+        }
+
+        // Exécutes la requête
+        return this.db.query(query, values)
+            .then(res => {
+                return res;
+            })
+            .catch(error => {
+                // Loggez l'erreur pour plus de détails
+                console.error('Erreur SQL:', error);
+                throw error; // Relancer l'erreur après logging
+            });
     }
 
     insertProg(programme){
@@ -35,7 +62,7 @@ module.exports = class ProgrammeDAO extends BaseDAO {
 
     verifyIDUser(programme_id){
         return new Promise((resolve, reject) =>
-            this.db.query(this.db.query("SELECT IDUser FROM Programme WHERE id=$1", [programme_id]))
+            this.db.query("SELECT IDUser FROM Programme WHERE id=$1", [programme_id])
                 .then(res => resolve(res.rows[0]) )
                 .catch(e => reject(e)))
     }

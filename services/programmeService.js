@@ -13,7 +13,7 @@ module.exports = class ProgrammeService {
         return true
     }
 
-    async isValidUser(programme_id, user_id) {
+    async isValidUserProgramme(programme_id, user_id) {
         var result = await this.dao.verifyIDUser(programme_id)
         if (result['iduser'] == user_id) {
             return true

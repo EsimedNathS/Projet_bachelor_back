@@ -72,6 +72,9 @@ module.exports = (ExerciceService, UserService, ProgrammeService) => {
             // INSERT ProgExo
             await ProgrammeService.dao.insertProgExo(programme_id, exercice_id)
 
+            // resolve à la fin par rapport aux tests unitaires
+            resolve()
+
 
         } catch (e) {
             if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html

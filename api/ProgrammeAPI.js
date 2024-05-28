@@ -127,7 +127,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
         }
         else {
             // Vérification du User
-            ProgrammeService.isValidUser(data_patch['id_programme'], req.user.id)
+            ProgrammeService.isValidUserProgramme(data_patch['id_programme'], req.user.id)
                 .then( verifyResult => {
                         if (verifyResult){
                             // Changement de la valeur voulue
