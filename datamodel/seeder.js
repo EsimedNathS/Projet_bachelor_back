@@ -20,41 +20,89 @@ module.exports = (ExerciceService, UserService, ProgrammeService) => {
 
 
             // INSERT Exercice
-            await ExerciceService.dao.insertExo(new Exercice(  "Curl Biceps",
-                                                                "Biceps, Possible avec des altères ou une poulie",
-                                                                "Top",
-                                                                "Isolation"
-                                                            )
-                                                )
-            await ExerciceService.dao.insertExo(new Exercice(  "Squat",
-                                                                "Quadriceps, Possible avec ou sans poids",
-                                                                "Bottom",
-                                                                "Polymusculaire"
-                                                            )
-                                                )
             await ExerciceService.dao.insertExo(new Exercice(  "Traction",
                                                                 "Grand dorsal, Faire avec une barre en hauteur",
                                                                 "Top",
                                                                 "Polymusculaire"
                                                             )
                                                 )
-            await ExerciceService.dao.insertExo(new Exercice(  "Leg Extension",
-                                                                "Quadriceps, Avec une machine",
-                                                                "Bottom",
-                                                                "Isolation"
-                                                            )
-                                                )
             await ExerciceService.dao.insertExo(new Exercice(  "Développer couché",
-                                                                "Pec principalement et épaule",
+                                                               "Pec principalement et épaule",
+                                                               "Top",
+                                                               "Polymusculaire"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Pec fly",
+                                                               "Pec, poulie/marchine/altère",
+                                                               "Top",
+                                                               "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Développer militaire",
+                                                               "Epaule, Barre ou altère",
+                                                               "Top",
+                                                               "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "élévation latérale",
+                                                               "Epaule, poulie ou altère",
+                                                               "Top",
+                                                               "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Tirage horizontal",
+                                                                "Grand dorsal, Faire avec une poulie",
                                                                 "Top",
-                                                                "Polymusculaire"
+                                                                "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Tirage vertical",
+                                                                "Grand dorsal, Faire avec une poulie",
+                                                                "Top",
+                                                                "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Curl Biceps",
+                                                               "Biceps, Possible avec des altères ou une poulie",
+                                                               "Top",
+                                                               "Isolation"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Squat",
+                                                               "Quadriceps, Possible avec ou sans poids",
+                                                               "Bottom",
+                                                               "Polymusculaire"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Presse oblique/horizontale",
+                                                               "Quadriceps et Ischio, Avec une machine",
+                                                               "Bottom",
+                                                               "Polymusculaire"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Fente bulgare",
+                                                               "Quadriceps, Possible avec ou sans poids",
+                                                               "Bottom",
+                                                               "Polymusculaire"
+                )
+            )
+            await ExerciceService.dao.insertExo(new Exercice(  "Leg Extension",
+                                                               "Quadriceps, Avec une machine",
+                                                               "Bottom",
+                                                               "Isolation"
                                                             )
-                                            )
-            var exo_test = new Exercice(  "Développer militaire",
-                                                   "Epaule, Barre ou altère",
-                                                   "Top",
-                                                   "Isolation"
                                                 )
+            await ExerciceService.dao.insertExo(new Exercice(  "Leg Curl",
+                                                               "Ischio jambier, Avec une machine",
+                                                               "Bottom",
+                                                               "Isolation"
+                                                            )
+                                                )
+            exo_test = new Exercice(  "Extension mollet",
+                "mollet, Avec une machine ou poids de corps",
+                "Bottom",
+                "Isolation"
+            );
             var res = await ExerciceService.dao.insertExo(exo_test);
             var exercice_id = res.rows[0].id;
 

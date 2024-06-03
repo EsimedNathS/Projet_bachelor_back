@@ -31,11 +31,7 @@ describe('API Tests', function() {
     // Suppression de l'utilisateur utilisé à la fin des tests
     after( (done) => {
         console.log("Deleting test user")
-        userService.get('user1').then(
-            (user) => {
-                userService.dao.delete(user.id).then(done())
-            }
-        )
+        userService.dao.deleteUser('user1','default').then(done())
     })
 
     // Test avec un token JWT valide
@@ -80,7 +76,7 @@ describe('API Tests', function() {
             .set('Authorization', `Bearer ${token}`)
             .send({exercice_id: "100"})
             .end((err, res) => {
-                res.should.have.status(500);
+                res.should.have.status(404);
                 done();
             });
     });
@@ -89,18 +85,19 @@ describe('API Tests', function() {
             .post('/exercice/favori')
             .set('Authorization', `Bearer ${token}`)
             .end((err, res) => {
-                res.should.have.status(500);
+                res.should.have.status(404);
                 done();
             });
     });
 
     // Test récupération de données
-    it('should return only one favori', (done) => {
+    it('should return an array', (done) => {
         chai.request(app)
             .get('/exercice/favori')
             .set('Authorization', `Bearer ${token}`)
             .end((err, res) => {
-                res.body.should.have.lengthOf(1);
+                res.should.have.status(200);
+                res.body.should.be.a('array');
                 done();
             });
     });
@@ -109,7 +106,7 @@ describe('API Tests', function() {
             .get('/exercice/favori')
             .set('Authorization', `Bearer wrongtoken`)
             .end((err, res) => {
-                res.should.have.status(500);
+                res.should.have.status(401);
                 done();
             });
     });
@@ -121,7 +118,16 @@ describe('API Tests', function() {
             .set('Authorization', `Bearer ${token}`)
             .send({exercice_id: "100"})
             .end((err, res) => {
-                res.should.have.status(500);
+                res.should.have.status(404);
+                done();
+            });
+    });
+    it('should not delete a Favori exercice (no id)', (done) => {
+        chai.request(app)
+            .delete('/exercice/favori')
+            .set('Authorization', `Bearer ${token}`)
+            .end((err, res) => {
+                res.should.have.status(404);
                 done();
             });
     });

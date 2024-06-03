@@ -5,6 +5,17 @@ module.exports = class ExerciceDAO extends BaseDAO {
         super(db, "Exercice")
     }
 
+    getById(id) {
+        return super.getById(id);
+    }
+
+    getByIdFavori(IDUser, IDExo) {
+        return new Promise((resolve, reject) =>
+            this.db.query("SELECT * FROM Favori_exo WHERE IDUser = $1 AND IDExo = $2", [IDUser, IDExo])
+                .then(res => resolve(res.rows))
+                .catch(e => reject(e)))
+    }
+
     getAll() {
         return new Promise((resolve, reject) =>
             this.db.query('SELECT * FROM Exercice ORDER BY id')

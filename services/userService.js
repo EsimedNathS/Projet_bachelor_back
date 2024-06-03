@@ -35,7 +35,7 @@ module.exports = class UserService {
     }
 
     isValidLogin(login) {
-        this.dao.getByLogin(login.trim())
+        return this.dao.getByLogin(login.trim())
             .then(user => {
                 if (user != null) {
                     return false

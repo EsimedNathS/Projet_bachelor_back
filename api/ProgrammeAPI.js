@@ -43,7 +43,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
         const programme_id = req.body['programme_id']
         const exercice_id = req.body['exercice_id']
         // Vérification du User
-        ProgrammeService.isValidUser(programme_id, req.user.id)
+        ProgrammeService.isValidUserProgramme(programme_id, req.user.id)
             .then( verifyResult => {
                     if (verifyResult){
                         // Ajout de l'exerice au programme
@@ -65,7 +65,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
         const programme_id = req.body['programme_id']
         const exercice_id = req.body['exercice_id']
         // Vérification du User
-        ProgrammeService.isValidUser(programme_id, req.user.id)
+        ProgrammeService.isValidUserProgramme(programme_id, req.user.id)
             .then( verifyResult => {
                     if (verifyResult){
                         // Enlève l'exerice du programme
@@ -86,7 +86,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
     app.delete("/programme/:id", jwt.validateJWT, async (req, res) => {
         const programme_id = req.params.id
         // Vérification du User
-        ProgrammeService.isValidUser(programme_id, req.user.id)
+        ProgrammeService.isValidUserProgramme(programme_id, req.user.id)
             .then( verifyResult => {
                     if (verifyResult){
                         // Supprime le programme

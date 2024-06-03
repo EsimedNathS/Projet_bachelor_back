@@ -16,4 +16,8 @@ module.exports = class UserDAO extends BaseDAO {
         return this.db.query("INSERT INTO Users (login,challenge) VALUES  ($1,$2)", [user.login, user.challenge])
     }
 
+    deleteUser(Login, challenge){
+        return this.db.query("DELETE FROM Users WHERE Login=$1 AND challenge=$1", [Login, challenge])
+    }
+
 }

@@ -1,22 +1,21 @@
 const User = require("../datamodel/user.js");
 const bodyParser = require('body-parser');
 
-module.exports = (app, Userservice, jwt) => {
+module.exports = async (app, Userservice, jwt) => {
 
     app.get("/verifyToken", jwt.validateJWT, async (req, res) => {
         return res.end();
     })
 
-    app.post("/user", (req, res) => {
+    app.post("/user", async (req, res) => {
         app.use(bodyParser.json());
         const user = req.body
-        console.log(req)
         // Vérifie le login
-        if (!Userservice.isValidLogin(user['login']))  {
+        if (!await Userservice.isValidLogin(user['login'])) {
             return res.status(402).end()
         }
         // Vérifie si le User est valide
-        if (!Userservice.isValidUser(user))  {
+        if (!Userservice.isValidUser(user)) {
             return res.status(400).end()
         }
         // Enregistre le User
@@ -26,10 +25,12 @@ module.exports = (app, Userservice, jwt) => {
                 console.log(e)
                 res.status(500).end()
             })
-    })
+    }
+)
+
 
     app.post('/user/authenticate', (req, res) => {
-        const { login, password } = req.body
+        const {login, password} = req.body
         // Vérifie si le login et le password sont bien définis
         if ((login === undefined) || (password === undefined)) {
             res.status(400).end()
