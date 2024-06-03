@@ -15,10 +15,20 @@ app.use(bodyParser.json()) // application/json
 app.use(cors())
 app.use(morgan('dev')); // toutes les requêtes HTTP dans le log du serveur
 
-//const connectionString = "postgres://user:password@192.168.56.101/instance"
-const connectionString = process.env.CONNECTION_STRING
+let dsn = process.env.CONNECTION_STRING
+if (dsn === undefined) {
+    const { env } = process;
+    const read_base64_json = function(varName) {
+        try {
+            return JSON.parse(Buffer.from(env[varName], "base64").toString())
+        } catch (err) {
+            throw new Error(`no ${varName} environment variable`) }
+    };
+    const variables = read_base64_json('PLATFORM_VARIABLES')
+    dsn = variables["CONNECTION_STRING"]
+}
 const port = process.env.PORT || 3333;
-const db = new pg.Pool({ connectionString: connectionString })
+const db = new pg.Pool({ connectionString: dsn })
 
 const exerciceService = new ExerciceService(db)
 const programmeService = new ProgrammeService(db)
