@@ -16,7 +16,7 @@ module.exports = async (app, Userservice, jwt) => {
         }
         // Vérifie si le User est valide
         if (!Userservice.isValidUser(user)) {
-            return res.status(400).end()
+            return res.status(401).end()
         }
         // Enregistre le User
         Userservice.insertUser(new User(user.login, user.password))

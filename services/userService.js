@@ -30,7 +30,7 @@ module.exports = class UserService {
         user.login = user.login.trim()
         if (user.login === "") return false
         user.password = user.password.trim()
-        if (user.password === "") return false
+        if (user.password === "" || user.password.length < 10) return false
         return true
     }
 

@@ -9,15 +9,13 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
                 try {
                     elementProg.exercice = await ExerciceService.dao.getAllByProgramme(elementProg.id);
                 } catch (error) {
-                    console.error('Erreur lors de la récupération des exercices pour le programme', elementProg.id, ':', error);
-                    throw error;
+                    res.status(500).json({ error: 'Erreur lors de la récupération des exercices pour le programme' + elementProg.id }).end();
                 }
             }
             console.log(allProg);
             res.json(allProg);
         } catch (error) {
-            console.error('Erreur lors de la récupération des programmes :', error);
-            res.status(500).json({ error: 'Erreur lors de la récupération des programmes' });
+            res.status(500).json({ error: 'Erreur lors de la récupération des programmes' }).end();
         }
     });
 
@@ -54,8 +52,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
                                 res.status(500).end()
                             })
                     } else {
-                        return res.status(403).end()
-                        //TODO gérer le front dans ce cas
+                        return res.status(403).json({ error: "Ce programme n'appartient pas à cet utilisateur"}).end();
                     }
                 }
             )
@@ -76,8 +73,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
                                 res.status(500).end()
                             })
                     } else {
-                        return res.status(403).end()
-                        //TODO gérer le front dans ce cas
+                        return res.status(403).json({ error: "Ce programme n'appartient pas à cet utilisateur"}).end();
                     }
                 }
             )
@@ -97,8 +93,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
                                 res.status(500).end()
                             })
                     } else {
-                        return res.status(403).end()
-                        //TODO gérer le front dans ce cas
+                        return res.status(403).json({ error: "Ce programme n'appartient pas à cet utilisateur"}).end();
                     }
                 }
             )
@@ -138,8 +133,7 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
                                     res.status(500).end()
                                 })
                         } else {
-                            return res.status(403).end()
-                            //TODO gérer le front dans ce cas
+                            return res.status(403).json({ error: "Ce programme n'appartient pas à cet utilisateur"}).end();
                         }
                     }
                 )
