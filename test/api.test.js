@@ -34,20 +34,20 @@ describe('API Tests', function() {
         userService.dao.deleteUser('user1','default').then(done())
     })
 
-    // Test avec un token JWT valide
+    // Test avec un token JWT valide sur les exercices
     it('should allow access with valid token', (done) => {
         chai.request(app)
             .get('/exercice')
             .set('Authorization', `Bearer ${token}`)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.be.a('array'); // TODO : remplacer array par object si votre route retourne un objet
+                res.body.should.be.a('array');
                 res.body.length.should.be.at.least(5);
                 done();
             });
     });
 
-    // Test avec un token JWT non valide
+    // Test avec un token JWT non valide sur les exercices
     it('should deny access with invalid token', (done) => {
         chai.request(app)
             .get('/exercice')
@@ -59,7 +59,7 @@ describe('API Tests', function() {
     });
 
 
-    // Tests insertion de données
+    // Tests insertion de données avec les favoris
     it('should insert a Favori exercice', (done) => {
         chai.request(app)
             .post('/exercice/favori')
@@ -90,7 +90,7 @@ describe('API Tests', function() {
             });
     });
 
-    // Test récupération de données
+    // Test récupération de données avec les favoris
     it('should return an array', (done) => {
         chai.request(app)
             .get('/exercice/favori')
@@ -111,7 +111,7 @@ describe('API Tests', function() {
             });
     });
 
-    //Test suppression de données
+    //Test suppression de données d'un favori
     it('should not delete a Favori exercice (invalid id)', (done) => {
         chai.request(app)
             .delete('/exercice/favori')

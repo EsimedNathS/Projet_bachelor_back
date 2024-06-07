@@ -25,9 +25,16 @@ module.exports = async (app, Userservice, jwt) => {
                 console.log(e)
                 res.status(500).end()
             })
-    }
-)
+    })
 
+    app.delete("/user", jwt.validateJWT, (req, res) => {
+        UserService.dao.delete(req.user.id)
+            .then(_ => res.status(200).end())
+            .catch(e => {
+                console.log(e)
+                res.status(500).end()
+            })
+    });
 
     app.post('/user/authenticate', (req, res) => {
         const {login, password} = req.body
