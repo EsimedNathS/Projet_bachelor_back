@@ -37,7 +37,7 @@ const jwt = require('./jwt')(userService)
 
 require('./api/ExerciceAPI.js')(app, exerciceService, jwt)
 require('./api/ProgrammeAPI.js')(app, programmeService, exerciceService, jwt)
-require('./api/UserAPI.js')(app, userService, jwt)
+require('./api/UserAPI.js')(app, userService, programmeService, exerciceService, jwt)
 const seedDatabase = async () => require('./datamodel/seeder')(exerciceService, userService, programmeService )
 if (require.main === module) {
     seedDatabase().then( () =>

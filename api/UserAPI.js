@@ -1,7 +1,7 @@
 const User = require("../datamodel/user.js");
 const bodyParser = require('body-parser');
 
-module.exports = async (app, Userservice, jwt) => {
+module.exports = async (app, UserService, ProgrammeService, ExerciceService, jwt) => {
 
     app.get("/verifyToken", jwt.validateJWT, async (req, res) => {
         return res.end();
@@ -11,15 +11,15 @@ module.exports = async (app, Userservice, jwt) => {
         app.use(bodyParser.json());
         const user = req.body
         // Vérifie le login
-        if (!await Userservice.isValidLogin(user['login'])) {
+        if (!await UserService.isValidLogin(user['login'])) {
             return res.status(402).end()
         }
         // Vérifie si le User est valide
-        if (!Userservice.isValidUser(user)) {
+        if (!UserService.isValidUser(user)) {
             return res.status(401).end()
         }
         // Enregistre le User
-        Userservice.insertUser(new User(user.login, user.password))
+        UserService.insertUser(new User(user.login, user.password))
             .then(_ => res.status(200).end())
             .catch(e => {
                 console.log(e)
@@ -29,22 +29,39 @@ module.exports = async (app, Userservice, jwt) => {
 
     app.delete("/user", jwt.validateJWT, (req, res) => {
         UserService.dao.delete(req.user.id)
-            .then(_ => res.status(200).end())
+            .then(_ =>
+                ProgrammeService.dao.deleteAllProg(req.user.id)
+                    .then(_ =>
+                        ExerciceService.dao.deleteAllFavori(req.user.id)
+                            .then(_ => res.status(200).end())
+                            .catch(e => {
+                                console.log(e)
+                                res.status(500).end()
+                            })
+                    )
+                    .catch(e => {
+                        console.log(e)
+                        res.status(500).end()
+                    })
+            )
             .catch(e => {
                 console.log(e)
                 res.status(500).end()
             })
     });
 
-    app.post('/user/authenticate', (req, res) => {
+    app.post('/user/authenticate', async (req, res) => {
         const {login, password} = req.body
         // Vérifie si le login et le password sont bien définis
         if ((login === undefined) || (password === undefined)) {
             res.status(400).end()
             return
         }
+        if (await UserService.isValidLogin(login)) {
+            return res.status(401).end()
+        }
         // Vérifie si le login/mdp existe bien
-        Userservice.validatePassword(login, password)
+        UserService.validatePassword(login, password)
             .then(authenticated => {
                 if (!authenticated) {
                     res.status(401).end()

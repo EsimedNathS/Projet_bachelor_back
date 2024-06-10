@@ -52,4 +52,11 @@ module.exports = class ExerciceDAO extends BaseDAO {
         return this.db.query("DELETE FROM Favori_exo WHERE IDExo=$1 AND IDUser=$2", [exercice_id, user_id])
     }
 
+    deleteAllFavori(id_user) {
+        return new Promise((resolve, reject) =>
+            this.db.query('DELETE FROM Favori_exo WHERE IDUser = $1', [id_user])
+                .then(res => resolve(res.rows))
+                .catch(e => reject(e)))
+    }
+
 }
