@@ -1,4 +1,3 @@
-const Exercice = require("../datamodel/exercice");
 module.exports = (app, ExerciceService, jwt) => {
 
     app.get("/exercice", jwt.validateJWT, async (req, res) => {

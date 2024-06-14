@@ -18,7 +18,7 @@ module.exports = class ProgrammeDAO extends BaseDAO {
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
-
+    
     patch(champ, value, id) {
         let query = "";
         const values = [value, id];

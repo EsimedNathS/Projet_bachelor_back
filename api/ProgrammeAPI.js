@@ -8,13 +8,13 @@ module.exports = (app, ProgrammeService, ExerciceService, jwt) => {
             for (const elementProg of allProg) {
                 try {
                     elementProg.exercice = await ExerciceService.dao.getAllByProgramme(elementProg.id);
-                } catch (error) {
+                } catch {
                     res.status(500).json({ error: 'Erreur lors de la récupération des exercices pour le programme' + elementProg.id }).end();
                 }
             }
             console.log(allProg);
             res.json(allProg);
-        } catch (error) {
+        } catch {
             res.status(500).json({ error: 'Erreur lors de la récupération des programmes' }).end();
         }
     });
