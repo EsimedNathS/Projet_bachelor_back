@@ -31,6 +31,8 @@ jobs:
         node-version: [20.11.0]
 
     steps:
+    - name: Run lint
+      run: npm run lint                                      s
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
